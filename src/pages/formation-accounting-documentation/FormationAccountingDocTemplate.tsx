@@ -568,7 +568,7 @@ const FormationAccountingDocTemplate: FC = () => {
                                     <TableCell size="small" align="center">L<sub>Нi</sub>, дБ</TableCell>
                                     <TableCell size="small" align="center">∆L<sub>тсi</sub>, дБ</TableCell>
                                     <TableCell size="small" align="center">LС<sub>прив.i</sub>, дБ</TableCell>
- `                                   <TableCell size="small" align="center">Е<sub>i</sub>, дБ</TableCell>
+                                    <TableCell size="small" align="center">Е<sub>i</sub>, дБ</TableCell>
                                     <TableCell size="small" align="center">Е<sub>n<sub>i</sub></sub>, дБ</TableCell>
                                     <TableCell size="small" align="center">Е<sub>iш</sub>, дБ</TableCell>
                                     <TableCell size="small" align="center">∆Е<sub>iш</sub>, дБ</TableCell>
@@ -578,7 +578,7 @@ const FormationAccountingDocTemplate: FC = () => {
                                 <TableRow
                                     sx={{'&:last-child td, &:last-child th': {border: 1, rowSpan: 1, borderColor: 'rgba(224, 224, 224, 1)'}}}
                                 >
-                                    <TableCell size="small" align="center"/>
+                                    <TableCell size="small" align="center"> </TableCell>
                                     <TableCell size="small" align="center">Среднеквадратичные частоты октав</TableCell>
                                     <TableCell size="small" align="center">Звуковое давление колонки (более 90 дБ)</TableCell>
                                     <TableCell size="small" align="center">Звуковое давление сигнал+шум</TableCell>
