@@ -1,9 +1,15 @@
-import React, {FC, useState} from "react";
+import React, {FC, useEffect, useState} from "react";
 import {Box, Paper, Typography} from "@mui/material";
 import {DataGrid, GridColumns, GridRowModel} from "@mui/x-data-grid";
 import GenerateId from "../../../../global-component/GenerateId";
 
-interface iTableField {
+interface iProps {
+    preparatoryDataVchnRef: {
+        current: iPreparatoryDataVchn[]
+    }
+}
+
+export interface iPreparatoryDataVchn {
     id: string,
     field1: string,
     field2: string,
@@ -11,7 +17,7 @@ interface iTableField {
 }
 
 
-const VchnPreparatoryData: FC = () => {
+const VchnPreparatoryData: FC<iProps> = (props) => {
 
     // Указываем какие поля будут в строке таблицы
     const columns: GridColumns = [
@@ -44,56 +50,11 @@ const VchnPreparatoryData: FC = () => {
         },
     ]
 
-    const [rowsTbPo, setRowsTbPo] = useState<iTableField[]>([
-        {
-            id: GenerateId(),
-            field1: 'Измеренный уровень несущей UН , дБ',
-            field2: '',
-            field3: 'Устанавливается оператором'
-        },
-        {
-            id: GenerateId(),
-            field1: 'Длина линии от ТС до границы КЗ D, м',
-            field2: '',
-            field3: 'Устанавливается оператором'
-        },
-        {
-            id: GenerateId(),
-            field1: 'Вид линии 1 – Тлф кабель; 2 – линия сигнализации; 3 – эл. сеть;',
-            field2: '',
-            field3: 'Устанавливается оператором'
-        },
-        {
-            id: GenerateId(),
-            field1: 'Нормированное отношение сигнал/шум ∆Н',
-            field2: '',
-            field3: 'Назначается оператором в соотв. с НМД'
-        },
-        {
-            id: GenerateId(),
-            field1: 'Нормированное значение словесной разборчивости речи WН',
-            field2: '',
-            field3: 'Назначается оператором в соотв. с НМД '
-        },
-        {
-            id: GenerateId(),
-            field1: 'Антенный коэффициент проводной линии hP , м',
-            field2: '',
-            field3: 'Приложение К'
-        },
-        {
-            id: GenerateId(),
-            field1: 'Нормированная плотность напряженности шума Eш.н. , мкВ/(м⸱кГц⸱0,5)',
-            field2: '',
-            field3: 'Приложение Г'
-        },
-        {
-            id: GenerateId(),
-            field1: 'Расчет коэффициента затухания в зависимости от вида линии ɑ, дБ/м',
-            field2: '',
-            field3: 'Приложение И'
-        },
-    ]);
+    const [rowsTbPo, setRowsTbPo] = useState<iPreparatoryDataVchn[]>(props.preparatoryDataVchnRef.current);
+
+    useEffect(() => {
+        props.preparatoryDataVchnRef.current = rowsTbPo
+    }, [rowsTbPo])
 
     // Функция для обновления табличных данных
     const processRowUpdate = React.useCallback(

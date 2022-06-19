@@ -1,4 +1,4 @@
-import React, {FC, useState} from "react";
+import React, {FC, useEffect, useState} from "react";
 import {
     Box,
     Button,
@@ -12,26 +12,24 @@ import {
     TableRow,
     Typography
 } from "@mui/material";
-import FreqDangSignals from "./tables/FreqDangSignals";
-import PreparatoryData from "./tables/PreparatoryData";
+import FreqDangSignals, {iFreqDangSignalsVchAep} from "./tables/FreqDangSignals";
+import PreparatoryData, {iPreparatoryDataVchAep} from "./tables/PreparatoryData";
 import {DataGrid, GridColumns, GridRowModel} from "@mui/x-data-grid";
-import GenerateId from "../../../global-component/GenerateId";
 
 
 interface iProps {
-    vcaepFiedl: {
-        current: iVcaep
+    measureResVchAepRef: {
+        current: iMeasureResVchAepField[]
     }
-}
-
-export interface iVcaep {
-    ush: number,
-    uh: number,
-    ucij: number,
-    kimkv: number,
-    ucprivij: number,
-    ecij: number,
-    deltaij: number
+    calculatedDataVchAepRef: {
+        current: iCalculatedDataVchAep[]
+    }
+    preparatoryDataVchAepRef: {
+        current: iPreparatoryDataVchAep[]
+    }
+    freqDangSignalsVchAepRef: {
+        current: iFreqDangSignalsVchAep[]
+    }
 }
 
 export interface iMeasureResVchAepField {
@@ -53,7 +51,7 @@ export interface iCalculatedDataVchAep {
 
 const VchAep: FC<iProps> = (props) => {
 
-    const [calculatedDataVchAep, setCalculatedDataVchAep] = useState<iCalculatedDataVchAep[]>([]);
+    const [calculatedDataVchAep, setCalculatedDataVchAep] = useState<iCalculatedDataVchAep[]>(props.calculatedDataVchAepRef.current);
 
     const calculateVcaep = () => {
         let copy: iCalculatedDataVchAep[] = [];
@@ -61,17 +59,64 @@ const VchAep: FC<iProps> = (props) => {
             //@ts-ignore
             let Ushij: number = measureResVchAepField[i].vchAepUshij === null ? 0 : measureResVchAepField[i].vchAepUshij
             //@ts-ignore
+            let Fi: number = measureResVchAepField[i].vchAepFi === null ? 0 : measureResVchAepField[i].vchAepFi
+            //@ts-ignore
             let Uhij: number = measureResVchAepField[i].vchAepUhij === null ? 0 : measureResVchAepField[i].vchAepUhij
             //@ts-ignore
             let Li: number = measureResVchAepField[i].vchAepLi === null ? 0 : measureResVchAepField[i].vchAepLi
 
-            let Ucij: number = 0.7 * Math.sqrt(Ushij - Uhij)
-            let Ki: number = 10 ^ ((Li - 30) / 20)
-            let Ucprivij: number = Ucij / Ki
+            // Перевод из децибел в мкВ
+            Ushij = +(Math.pow(10, (Ushij/20))).toFixed(3)
+
+            // 1. Рассчитать уровень информативного сигнала
+            let Ucij: number = +(0.7 * Math.sqrt(Math.pow(Ushij, 2) - Math.pow(Uhij, 2))).toFixed(3)
+
+            // 2. Рассчитать степень превышения создаваемого акустического давления над нормированным звуковым
+            // давлением в i-ой октаве (коэффициент увеличения звукового давления)
+            let Lni: number;
+            if (Fi === 275 || Fi === 525) {
+                Lni = 66
+            } else if (Fi === 1025) {
+                Lni = 61
+            } else if (Fi === 2025) {
+                Lni = 56
+            } else if (Fi === 4025) {
+                Lni = 53
+            } else {
+                Lni = 0
+            }
+            let Ki: number = +(Math.pow(10, ((Li - Lni) / 20))).toFixed(1)
+
+            // 3. Рассчитать октавный уровень информативного сигнала, приведенного к нормированному уровню
+            // акустического воздействия
+            let Ucprivij: number = +(Ucij / Ki).toFixed(3)
+
+            // 4. Рассчитать напряженность поля информативного сигнала на j-й частоте встроенного генератора (Fj) в
+            // i-й октаве на границе контролируемой зоны
             let Kz: number = 23
-            let Ecij: number = Ucprivij / Kz
-            let Ehoktnij: number = 0.007
-            let Deltaij: number = Ecij / Ehoktnij
+            let Kant: number = 10
+            let Ecij: number = +((Ucprivij / Kz) * Kant).toFixed(3)
+
+            // 5. Рассчитать уровень напряженности нормированного шума в пяти октавах Ешпij для стационарных, возимых и
+            // носимых технических средств разведки
+            let Ehoktnij: number;
+            if (Fi === 275) {
+                Ehoktnij = 0.007
+            } else if (Fi === 525) {
+                Ehoktnij = 0.010
+            } else if (Fi === 1025) {
+                Ehoktnij = 0.013
+            } else if (Fi === 2025) {
+                Ehoktnij = 0.019
+            } else if (Fi === 4025) {
+                Ehoktnij = 0.027
+            } else {
+                Ehoktnij = 0
+            }
+
+            // 6. Рассчитать отношение "информативный сигнал/шум" в i-й октаве на j-й частоте автогенератора ТС на
+            // границе КЗ
+            let Deltaij: number = +(Ecij / Ehoktnij).toFixed(3)
 
             const obj: iCalculatedDataVchAep = {
                 Ucij,
@@ -82,9 +127,9 @@ const VchAep: FC<iProps> = (props) => {
             }
             copy.push(obj)
         }
+        props.calculatedDataVchAepRef.current = copy;
         return copy;
     }
-
 
     // Указываем какие поля будут в строке таблицы
     const columns: GridColumns = [
@@ -108,7 +153,7 @@ const VchAep: FC<iProps> = (props) => {
         },
         {
             field: 'vchAepUshij',
-            headerName: 'Uсшij',
+            headerName: 'Uсшij, дБ',
             width: 245,
             editable: true,
             type: "number",
@@ -117,7 +162,7 @@ const VchAep: FC<iProps> = (props) => {
         },
         {
             field: 'vchAepUhij',
-            headerName: 'Uсшij',
+            headerName: 'Uшij, мкВ',
             width: 245,
             editable: true,
             type: "number",
@@ -135,48 +180,7 @@ const VchAep: FC<iProps> = (props) => {
         },
     ]
 
-    const [measureResVchAepField, setMeasureResVchAepField] = useState<iMeasureResVchAepField[]>([
-        {
-            id: GenerateId(),
-            numberOrder: 1,
-            vchAepFi: 275,
-            vchAepUshij: 0,
-            vchAepUhij: 0,
-            vchAepLi: 0
-        },
-        {
-            id: GenerateId(),
-            numberOrder: 2,
-            vchAepFi: 525,
-            vchAepUshij: 0,
-            vchAepUhij: 0,
-            vchAepLi: 0
-        },
-        {
-            id: GenerateId(),
-            numberOrder: 3,
-            vchAepFi: 1025,
-            vchAepUshij: 0,
-            vchAepUhij: 0,
-            vchAepLi: 0
-        },
-        {
-            id: GenerateId(),
-            numberOrder: 4,
-            vchAepFi: 2025,
-            vchAepUshij: 0,
-            vchAepUhij: 0,
-            vchAepLi: 0
-        },
-        {
-            id: GenerateId(),
-            numberOrder: 5,
-            vchAepFi: 4025,
-            vchAepUshij: 0,
-            vchAepUhij: 0,
-            vchAepLi: 0
-        },
-    ]);
+    const [measureResVchAepField, setMeasureResVchAepField] = useState<iMeasureResVchAepField[]>(props.measureResVchAepRef.current);
 
     // Функция для обновления табличных данных
     const processRowUpdate = React.useCallback(
@@ -187,13 +191,21 @@ const VchAep: FC<iProps> = (props) => {
         [measureResVchAepField],
     );
 
+    useEffect(() => {
+        props.measureResVchAepRef.current = measureResVchAepField;
+    }, [measureResVchAepField])
+
     return (
         <React.Fragment>
             <Typography variant={'h6'} textAlign={'center'} sx={{mb: 2}}>Расчет ВЧ
                 АЭП</Typography>
             <Stack spacing={2}>
-                <FreqDangSignals/>
-                <PreparatoryData/>
+                <FreqDangSignals
+                    freqDangSignalsVchAepRef={props.freqDangSignalsVchAepRef}
+                />
+                <PreparatoryData
+                    preparatoryDataVchAepRef={props.preparatoryDataVchAepRef}
+                />
                 <Paper elevation={4}>
                     <Box p={2}>
                         <Typography variant={'h6'} pb={2}>Результаты измерений</Typography>

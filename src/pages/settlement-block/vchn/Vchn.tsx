@@ -1,4 +1,4 @@
-import React, {FC, useState} from "react";
+import React, {FC, useEffect, useState} from "react";
 import {
     Box,
     Button,
@@ -13,14 +13,22 @@ import {
     Typography
 } from "@mui/material";
 import {DataGrid, GridColumns, GridRowModel} from "@mui/x-data-grid";
-import GenerateId from "../../../global-component/GenerateId";
-import VchnPreparatoryData from "./table/VchnPreparatoryData";
-import VchnFreqDangSignals from "./table/VchnFreqDangSignals";
+import VchnPreparatoryData, {iPreparatoryDataVchn} from "./table/VchnPreparatoryData";
+import VchnFreqDangSignals, {iFreqDangSignalsVchn} from "./table/VchnFreqDangSignals";
 
 
 interface iProps {
-    vcaepFiedl: {
-        current: iVcaep
+    measureResVchnRef: {
+        current: iMeasureResVchnField[]
+    }
+    calculatedDataVchnRef: {
+        current: iCalculatedDataVchn[]
+    }
+    preparatoryDataVchnRef: {
+        current: iPreparatoryDataVchn[]
+    }
+    freqDangSignalsVchnRef: {
+        current: iFreqDangSignalsVchn[]
     }
 }
 
@@ -34,7 +42,7 @@ export interface iVcaep {
     deltaij: number
 }
 
-export interface imeasureResVchnField {
+export interface iMeasureResVchnField {
     id: string,
     numberOrder: number | null,
     vchnI: number | null,
@@ -44,7 +52,9 @@ export interface imeasureResVchnField {
     vchnLni: number | null,
     vchnLi: number | null,
     vchnUshi: number | null,
-    vchnUhi: number | null
+    vchnUhi: number | null,
+    vchnUni: number | null,
+    vchnD: number | null,
 }
 
 export interface iCalculatedDataVchn {
@@ -53,13 +63,13 @@ export interface iCalculatedDataVchn {
     Ki: number,
     Ucprivi: number,
     mi: number,
-    Uhni: number,
-    Uhokti: number
+    Uskzij: number,
+    Deltaij: number
 }
 
 const Vchn: FC<iProps> = (props) => {
 
-    const [calculatedDataVchn, setCalculatedDataVchn] = useState<iCalculatedDataVchn[]>([]);
+    const [calculatedDataVchn, setCalculatedDataVchn] = useState<iCalculatedDataVchn[]>(props.calculatedDataVchnRef.current);
 
     const calculateVcaep = () => {
         let copy: iCalculatedDataVchn[] = [];
@@ -76,13 +86,58 @@ const Vchn: FC<iProps> = (props) => {
             let FniFvi: number = measureResVchnField[i].vchnFniFvi === null ? 0 : measureResVchnField[i].vchnFniFvi
             //@ts-ignore
             let Fi: number = measureResVchnField[i].vchnFi === null ? 0 : measureResVchnField[i].vchnFi
+            //@ts-ignore
+            let DeltaFi: number = measureResVchnField[i].vchnDeltaFi === null ? 0 : measureResVchnField[i].vchnDeltaFi
+            //@ts-ignore
+            let Uni: number = measureResVchnField[i].vchnUni === null ? 0 : measureResVchnField[i].vchnUni
+            //@ts-ignore
+            let D: number = measureResVchnField[i].vchnD === null ? 0 : measureResVchnField[i].vchnD
 
-            let Uci: number = 0.7 * Math.sqrt(Ushi ^ 2 - Uhi ^ 2)
-            let Ki: number = 10 ^ ((Li - Lni) / 20)
-            let Ucprivi: number = Uci / Ki
-            let mi: number = (2 * Ucprivi) / (0.7 * Uhi)
-            let Uhni: number = Uhi / Math.sqrt(Ucprivi)
-            let Uhokti: number = (Ucprivi / (mi * Math.sqrt(FniFvi))) * Math.sqrt(Fi)
+            // Перевод из децибел в мкВ
+            Ushi = +(Math.pow(10, (Ushi/20))).toFixed(3)
+            Uhi = +(Math.pow(10, (Uhi/20))).toFixed(3)
+
+            // 1. Рассчитать уровень информативного сигнала
+            let Uci: number = +(0.7 * Math.sqrt(Math.pow(Ushi, 2) - Math.pow(Uhi, 2))).toFixed(3)
+
+            // 2.	Рассчитать степень превышения создаваемого акустического давления над нормированным звуковым
+            // давлением в i-ой октаве (коэффициент увеличения звукового давления)
+            let Ki: number = +(Math.pow(10, ((Li - Lni) / 20))).toFixed(1)
+
+            // 3. Рассчитать октавный уровень информативного сигнала, приведенного к нормированному уровню акустического
+            // воздействия:
+            let Ucprivi: number = +(Uci / Ki).toFixed(3)
+
+            // 4. Рассчитать коэффициент модуляции отраженного сигнала информативным сигналом
+            let mi = +((2 * Ucprivi)/(0.7 * Uni)).toFixed(7)
+
+            // 5. Рассчитать напряжение нормированного шума в каждой октаве:
+            let Ehnj: number;
+            if (Fi === 275) {
+                Ehnj = 0.007
+            } else if (Fi === 525) {
+                Ehnj = 0.010
+            } else if (Fi === 1025) {
+                Ehnj = 0.013
+            } else if (Fi === 2025) {
+                Ehnj = 0.019
+            } else if (Fi === 4025) {
+                Ehnj = 0.027
+            } else {
+                Ehnj = 0
+            }
+            let hdj: number = 2.1
+            let Ushnotkij: number = +(Ehnj * hdj * Math.sqrt(DeltaFi)).toFixed(3)
+
+            // 6. Рассчитать октавный уровень информативного сигнала на границе КЗ:
+            let Kotr: number = 0.1
+            let UnazN: number = Math.pow(10, 6)
+            let a: number = 0.05
+            let Uskzij: number = +(0.5 * mi * Kotr * UnazN * Math.pow(10, (-0.1 * a - D))).toFixed(12)
+
+            // 7
+            let Deltaij = +(Uskzij/Ushnotkij).toFixed(12)
+
 
             const obj: iCalculatedDataVchn = {
                 Fi,
@@ -90,11 +145,12 @@ const Vchn: FC<iProps> = (props) => {
                 Ki,
                 Ucprivi,
                 mi,
-                Uhni,
-                Uhokti
+                Uskzij,
+                Deltaij
             }
             copy.push(obj)
         }
+        props.calculatedDataVchnRef.current = copy
         return copy;
     }
 
@@ -113,7 +169,7 @@ const Vchn: FC<iProps> = (props) => {
         {
             field: 'vchnI',
             headerName: 'i',
-            width: 245,
+            width: 100,
             editable: false,
             type: "number",
             headerAlign: 'center',
@@ -122,7 +178,7 @@ const Vchn: FC<iProps> = (props) => {
         {
             field: 'vchnFi',
             headerName: 'Fi',
-            width: 245,
+            width: 100,
             editable: false,
             type: "number",
             headerAlign: 'center',
@@ -131,7 +187,7 @@ const Vchn: FC<iProps> = (props) => {
         {
             field: 'vchnDeltaFi',
             headerName: '∆fi ,Гц',
-            width: 245,
+            width: 100,
             editable: true,
             type: "number",
             headerAlign: 'center',
@@ -140,7 +196,7 @@ const Vchn: FC<iProps> = (props) => {
         {
             field: 'vchnFniFvi',
             headerName: 'fнifвi, Гц',
-            width: 245,
+            width: 100,
             editable: true,
             type: "number",
             headerAlign: 'center',
@@ -149,7 +205,7 @@ const Vchn: FC<iProps> = (props) => {
         {
             field: 'vchnLni',
             headerName: 'Lнi, дБ',
-            width: 245,
+            width: 100,
             editable: true,
             type: "number",
             headerAlign: 'center',
@@ -158,7 +214,7 @@ const Vchn: FC<iProps> = (props) => {
         {
             field: 'vchnLi',
             headerName: 'Li, дБ',
-            width: 245,
+            width: 100,
             editable: true,
             type: "number",
             headerAlign: 'center',
@@ -167,7 +223,7 @@ const Vchn: FC<iProps> = (props) => {
         {
             field: 'vchnUshi',
             headerName: 'Ucшi, дБ',
-            width: 245,
+            width: 100,
             editable: true,
             type: "number",
             headerAlign: 'center',
@@ -176,7 +232,25 @@ const Vchn: FC<iProps> = (props) => {
         {
             field: 'vchnUhi',
             headerName: 'Uшi,дБ',
-            width: 245,
+            width: 100,
+            editable: true,
+            type: "number",
+            headerAlign: 'center',
+            align: 'center'
+        },
+        {
+            field: 'vchnUni',
+            headerName: 'Uнi',
+            width: 100,
+            editable: true,
+            type: "number",
+            headerAlign: 'center',
+            align: 'center'
+        },
+        {
+            field: 'vchnD',
+            headerName: 'D',
+            width: 100,
             editable: true,
             type: "number",
             headerAlign: 'center',
@@ -184,68 +258,7 @@ const Vchn: FC<iProps> = (props) => {
         },
     ]
 
-    const [measureResVchnField, setMeasureResVchnField] = useState<imeasureResVchnField[]>([
-        {
-            id: GenerateId(),
-            numberOrder: 1,
-            vchnI: 275,
-            vchnFi: 275,
-            vchnDeltaFi: 0,
-            vchnFniFvi: 0,
-            vchnLni: 0,
-            vchnLi: 0,
-            vchnUshi: 0,
-            vchnUhi: 0
-        },
-        {
-            id: GenerateId(),
-            numberOrder: 2,
-            vchnI: 525,
-            vchnFi: 525,
-            vchnDeltaFi: 0,
-            vchnFniFvi: 0,
-            vchnLni: 0,
-            vchnLi: 0,
-            vchnUshi: 0,
-            vchnUhi: 0
-        },
-        {
-            id: GenerateId(),
-            numberOrder: 3,
-            vchnI: 1025,
-            vchnFi: 1025,
-            vchnDeltaFi: 0,
-            vchnFniFvi: 0,
-            vchnLni: 0,
-            vchnLi: 0,
-            vchnUshi: 0,
-            vchnUhi: 0
-        },
-        {
-            id: GenerateId(),
-            numberOrder: 4,
-            vchnI: 2025,
-            vchnFi: 2025,
-            vchnDeltaFi: 0,
-            vchnFniFvi: 0,
-            vchnLni: 0,
-            vchnLi: 0,
-            vchnUshi: 0,
-            vchnUhi: 0
-        },
-        {
-            id: GenerateId(),
-            numberOrder: 5,
-            vchnI: 4025,
-            vchnFi: 4025,
-            vchnDeltaFi: 0,
-            vchnFniFvi: 0,
-            vchnLni: 0,
-            vchnLi: 0,
-            vchnUshi: 0,
-            vchnUhi: 0
-        },
-    ]);
+    const [measureResVchnField, setMeasureResVchnField] = useState<iMeasureResVchnField[]>(props.measureResVchnRef.current);
 
     // Функция для обновления табличных данных
     const processRowUpdate = React.useCallback(
@@ -256,12 +269,20 @@ const Vchn: FC<iProps> = (props) => {
         [measureResVchnField],
     );
 
+    useEffect(() => {
+        props.measureResVchnRef.current = measureResVchnField
+    }, [measureResVchnField])
+
     return (
         <React.Fragment>
             <Typography variant={'h6'} textAlign={'center'} sx={{mb: 2}}>Расчет ВЧН</Typography>
             <Stack spacing={2}>
-                <VchnFreqDangSignals/>
-                <VchnPreparatoryData/>
+                <VchnFreqDangSignals
+                    freqDangSignalsVchnRef={props.freqDangSignalsVchnRef}
+                />
+                <VchnPreparatoryData
+                    preparatoryDataVchnRef={props.preparatoryDataVchnRef}
+                />
                 <Paper elevation={4}>
                     <Box p={2}>
                         <Typography variant={'h6'} pb={2}>Результаты измерений</Typography>
@@ -291,8 +312,8 @@ const Vchn: FC<iProps> = (props) => {
                                         <TableCell size="small" align="center">K<sub>i</sub></TableCell>
                                         <TableCell size="small" align="center">U<sub>c.привi</sub>, мкВ</TableCell>
                                         <TableCell size="small" align="center">m<sub>шнi</sub>, мкВ</TableCell>
-                                        <TableCell size="small" align="center">U<sub>шнi</sub>, мкВ</TableCell>
-                                        <TableCell size="small" align="center">U<sub>ш.октi</sub>, мкВ</TableCell>
+                                        <TableCell size="small" align="center">U<sub>с.кзij</sub></TableCell>
+                                        <TableCell size="small" align="center">∆<sub>ij</sub></TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
@@ -313,8 +334,8 @@ const Vchn: FC<iProps> = (props) => {
                                             <TableCell align="center">{obj.Ki}</TableCell>
                                             <TableCell align="center">{obj.Ucprivi}</TableCell>
                                             <TableCell align="center">{obj.mi}</TableCell>
-                                            <TableCell align="center">{obj.Uhni}</TableCell>
-                                            <TableCell align="center">{obj.Uhokti}</TableCell>
+                                            <TableCell align="center">{obj.Uskzij}</TableCell>
+                                            <TableCell align="center">{obj.Deltaij}</TableCell>
                                         </TableRow>
                                     ))}
                                 </TableBody>

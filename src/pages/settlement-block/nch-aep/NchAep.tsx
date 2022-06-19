@@ -1,4 +1,4 @@
-import React, {FC, useState} from "react";
+import React, {FC, useEffect, useState} from "react";
 import {
     Box,
     Button,
@@ -17,8 +17,11 @@ import GenerateId from "../../../global-component/GenerateId";
 
 
 interface iProps {
-    vcaepFiedl: {
-        current: iVcaep
+    measureResNchAepRef: {
+        current: iMeasureResNchAepField[]
+    }
+    calculatedDataNchAepRef: {
+        current: iCalculatedDataNchAep[]
     }
 }
 
@@ -56,7 +59,7 @@ export interface iCalculatedDataNchAep {
 
 const NchAep: FC<iProps> = (props) => {
 
-    const [calculatedDataVchAep, setCalculatedDataVchAep] = useState<iCalculatedDataNchAep[]>([]);
+    const [calculatedDataNchAep, setCalculatedDataVchAep] = useState<iCalculatedDataNchAep[]>(props.calculatedDataNchAepRef.current);
 
     const calculateVcaep = () => {
         let copy: iCalculatedDataNchAep[] = [];
@@ -74,12 +77,36 @@ const NchAep: FC<iProps> = (props) => {
             //@ts-ignore
             let DeltaFi: number = measureResNchAepField[i].nchAepDeltaFi === null ? 0 : measureResNchAepField[i].nchAepDeltaFi
 
-            let Uci: number = 0.7 * Math.sqrt((Ushi) ^ 2 - (Uhi) ^ 2)
-            let Ki: number = 10 ^ ((Li - Lni) / 20)
-            let Ucprivi: number = Uci / Ki
-            let NoUsnokti: number = Fi / DeltaFi
-            let Usnokti: number = Uci * Math.sqrt(NoUsnokti)
-            let Deltai: number = Ucprivi / Usnokti
+            // Перевод из децибел в мкВ
+            Ushi = +(Math.pow(10, (Ushi/20))).toFixed(3)
+            //1. Рассчитать уровень информативного сигнала
+            let Uci: number = +(0.7 * Math.sqrt(Math.pow(Ushi, 2) - Math.pow(Uhi, 2))).toFixed(3)
+
+            // 2
+            let Ki: number = +(Math.pow(10, ((Li - Lni) / 20))).toFixed(1)
+
+            // 3
+            let Ucprivi: number = +(Uci / Ki).toFixed(3)
+
+
+            let NoUsnokti: number
+
+            if (Fi === 275) {
+                NoUsnokti = 0.055
+            } else if (Fi === 525) {
+                NoUsnokti = 0.068
+            } else if (Fi === 1025) {
+                NoUsnokti = 0.081
+            } else if (Fi === 2025) {
+                NoUsnokti = 0.098
+            } else if (Fi === 4025) {
+                NoUsnokti = 0.117
+            } else {
+                NoUsnokti = 0
+            }
+
+            let Usnokti: number = +(NoUsnokti).toFixed(3)
+            let Deltai: number = +(Ucprivi / Usnokti).toFixed(3)
 
             const obj: iCalculatedDataNchAep = {
                 Fi,
@@ -91,6 +118,7 @@ const NchAep: FC<iProps> = (props) => {
             }
             copy.push(obj)
         }
+        props.calculatedDataNchAepRef.current = copy
         return copy;
     }
 
@@ -180,68 +208,7 @@ const NchAep: FC<iProps> = (props) => {
         },
     ]
 
-    const [measureResNchAepField, setMeasureResNchAepField] = useState<iMeasureResNchAepField[]>([
-        {
-            id: GenerateId(),
-            numberOrder: 1,
-            nchAepFi: 275,
-            nchAepDeltaFi: 0,
-            nchAepDeltaFipr: 0,
-            nchAepLni: 0,
-            nchAepLi: 0,
-            nchAepUshi: 0,
-            nchAepUhi: 0,
-            nchAepUh0i: 0
-        },
-        {
-            id: GenerateId(),
-            numberOrder: 2,
-            nchAepFi: 525,
-            nchAepDeltaFi: 0,
-            nchAepDeltaFipr: 0,
-            nchAepLni: 0,
-            nchAepLi: 0,
-            nchAepUshi: 0,
-            nchAepUhi: 0,
-            nchAepUh0i: 0
-        },
-        {
-            id: GenerateId(),
-            numberOrder: 3,
-            nchAepFi: 1025,
-            nchAepDeltaFi: 0,
-            nchAepDeltaFipr: 0,
-            nchAepLni: 0,
-            nchAepLi: 0,
-            nchAepUshi: 0,
-            nchAepUhi: 0,
-            nchAepUh0i: 0
-        },
-        {
-            id: GenerateId(),
-            numberOrder: 4,
-            nchAepFi: 2025,
-            nchAepDeltaFi: 0,
-            nchAepDeltaFipr: 0,
-            nchAepLni: 0,
-            nchAepLi: 0,
-            nchAepUshi: 0,
-            nchAepUhi: 0,
-            nchAepUh0i: 0
-        },
-        {
-            id: GenerateId(),
-            numberOrder: 5,
-            nchAepFi: 4025,
-            nchAepDeltaFi: 0,
-            nchAepDeltaFipr: 0,
-            nchAepLni: 0,
-            nchAepLi: 0,
-            nchAepUshi: 0,
-            nchAepUhi: 0,
-            nchAepUh0i: 0
-        },
-    ]);
+    const [measureResNchAepField, setMeasureResNchAepField] = useState<iMeasureResNchAepField[]>(props.measureResNchAepRef.current);
 
     // Функция для обновления табличных данных
     const processRowUpdate = React.useCallback(
@@ -251,6 +218,10 @@ const NchAep: FC<iProps> = (props) => {
         },
         [measureResNchAepField],
     );
+
+    useEffect(() => {
+        props.measureResNchAepRef.current = measureResNchAepField
+    }, [measureResNchAepField])
 
     return (
         <React.Fragment>
@@ -289,7 +260,7 @@ const NchAep: FC<iProps> = (props) => {
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
-                                    {calculatedDataVchAep.map((obj, index) => (
+                                    {calculatedDataNchAep.map((obj, index) => (
                                         <TableRow
                                             key={index}
                                             sx={{

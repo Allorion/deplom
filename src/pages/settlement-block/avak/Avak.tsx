@@ -17,7 +17,12 @@ import GenerateId from "../../../global-component/GenerateId";
 
 
 interface iProps {
-
+    measureResAvakRef: {
+        current: iMeasureResAvakField[]
+    }
+    calculatedDataAvakRef: {
+        current: iCalculatedDataAvak[]
+    }
 }
 
 export interface iMeasureResAvakField {
@@ -52,7 +57,7 @@ export interface iCalculatedDataAvak {
 
 const Avak: FC<iProps> = (props) => {
 
-    const [calculatedDataAvak, setCalculatedDataAvak] = useState<iCalculatedDataAvak[]>([]);
+    const [calculatedDataAvak, setCalculatedDataAvak] = useState<iCalculatedDataAvak[]>(props.calculatedDataAvakRef.current);
 
     const calculateAvak = () => {
         let copy: iCalculatedDataAvak[] = [];
@@ -79,7 +84,7 @@ const Avak: FC<iProps> = (props) => {
             //@ts-ignore
             let DeltaEih: number = measureResAvakField[i].DeltaEih === null ? 0 : measureResAvakField[i].DeltaEih
 
-            let Lci = 10 * Math.log((10 ^ (Lchi / 10)) - (10 ^ (Lhi / 10)))
+            let Lci = 10 * Math.log(Math.pow(10, (Lchi / 10)) - Math.pow(10, (Lhi / 10)))
             let DeltaLi: number = Ltci - Lni
             let Lcprivi: number = Lci - DeltaLi
             let Ei: number = Lcprivi - Lhi
@@ -101,6 +106,7 @@ const Avak: FC<iProps> = (props) => {
             }
             copy.push(obj)
         }
+        props.calculatedDataAvakRef.current = copy
         return copy;
     }
 
@@ -120,7 +126,7 @@ const Avak: FC<iProps> = (props) => {
             field: 'Ltci',
             headerName: 'LТСi, дБ',
             width: 150,
-            editable: false,
+            editable: true,
             type: "number",
             headerAlign: 'center',
             align: 'center'
@@ -129,7 +135,7 @@ const Avak: FC<iProps> = (props) => {
             field: 'Lchi',
             headerName: 'LС+Шi,дБ',
             width: 150,
-            editable: false,
+            editable: true,
             type: "number",
             headerAlign: 'center',
             align: 'center'
@@ -138,7 +144,7 @@ const Avak: FC<iProps> = (props) => {
             field: 'Lhi',
             headerName: 'LШi,дБ',
             width: 150,
-            editable: true,
+            editable: false,
             type: "number",
             headerAlign: 'center',
             align: 'center'
@@ -174,7 +180,7 @@ const Avak: FC<iProps> = (props) => {
             field: 'Eni',
             headerName: 'Еni, дБ',
             width: 150,
-            editable: true,
+            editable: false,
             type: "number",
             headerAlign: 'center',
             align: 'center'
@@ -199,78 +205,13 @@ const Avak: FC<iProps> = (props) => {
         },
     ]
 
-    const [measureResAvakField, setMeasureResAvakField] = useState<iMeasureResAvakField[]>([
-        {
-            id: GenerateId(),
-            Fi: 250,
-            Ltci: 0,
-            Lchi: 0,
-            Lhi: 0,
-            Q: 0,
-            Lni: 66,
-            DeltaLtci: 0,
-            Eni: -2,
-            Eih: 0,
-            DeltaEih: 0
-        },
-        {
-            id: GenerateId(),
-            Fi: 500,
-            Ltci: 0,
-            Lchi: 0,
-            Lhi: 0,
-            Q: 0,
-            Lni: 66,
-            DeltaLtci: 0,
-            Eni: -6,
-            Eih: 0,
-            DeltaEih: 0
-        },
-        {
-            id: GenerateId(),
-            Fi: 1000,
-            Ltci: 0,
-            Lchi: 0,
-            Lhi: 0,
-            Q: 0,
-            Lni: 61,
-            DeltaLtci: 0,
-            Eni: -10,
-            Eih: 0,
-            DeltaEih: 0
-        },
-        {
-            id: GenerateId(),
-            Fi: 2000,
-            Ltci: 0,
-            Lchi: 0,
-            Lhi: 0,
-            Q: 0,
-            Lni: 56,
-            DeltaLtci: 0,
-            Eni: -13,
-            Eih: 0,
-            DeltaEih: 0
-        },
-        {
-            id: GenerateId(),
-            Fi: 4000,
-            Ltci: 0,
-            Lchi: 0,
-            Lhi: 0,
-            Q: 0,
-            Lni: 53,
-            DeltaLtci: 0,
-            Eni: -16,
-            Eih: 0,
-            DeltaEih: 0
-        },
-    ]);
+    const [measureResAvakField, setMeasureResAvakField] = useState<iMeasureResAvakField[]>(props.measureResAvakRef.current);
 
     // Функция для обновления табличных данных
     const processRowUpdate = React.useCallback(
         async (newRow: GridRowModel) => {
             setMeasureResAvakField(measureResAvakField.map(n => n.id === newRow.id ? newRow : n))
+            props.measureResAvakRef.current = measureResAvakField
             return newRow;
         },
         [measureResAvakField],
@@ -278,7 +219,7 @@ const Avak: FC<iProps> = (props) => {
 
     return (
         <React.Fragment>
-            <Typography variant={'h6'} textAlign={'center'} sx={{mb: 2}}>Расчет НЧ АЭП</Typography>
+            <Typography variant={'h6'} textAlign={'center'} sx={{mb: 2}}>Расчет АВАК</Typography>
             <Stack spacing={2}>
                 <Paper elevation={4}>
                     <Box p={2}>
@@ -319,7 +260,7 @@ const Avak: FC<iProps> = (props) => {
                                         <TableCell size="small" align="center">∆Е<sub>iш</sub>, дБ</TableCell>
                                     </TableRow>
                                 </TableHead>
-                                    <TableHead>
+                                <TableHead>
                                     <TableRow
                                         sx={{'&:last-child td, &:last-child th': {border: 1, rowSpan: 1}}}
                                     >

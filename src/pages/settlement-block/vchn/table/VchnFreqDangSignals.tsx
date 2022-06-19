@@ -1,11 +1,17 @@
-import React, {FC, useState} from "react";
+import React, {FC, useEffect, useState} from "react";
 import {Box, Button, Paper, Typography} from "@mui/material";
 import {DataGrid, GridActionsCellItem, GridColumns, GridRowModel} from "@mui/x-data-grid";
 import GenerateId from "../../../../global-component/GenerateId";
 import DeleteIcon from "@mui/icons-material/Delete";
 
+interface iProps {
+    freqDangSignalsVchnRef: {
+        current: iFreqDangSignalsVchn[]
+    }
+}
 
-interface iTableField {
+
+export interface iFreqDangSignalsVchn {
     id: string,
     numberOrder: number,
     j1: number | null,
@@ -18,7 +24,7 @@ interface iTableField {
     Fj4: number | null,
 }
 
-const FreqDangSignals: FC = () => {
+const FreqDangSignals: FC<iProps> = (props) => {
 
     // Указываем какие поля будут в строке таблицы
     const columns: GridColumns = [
@@ -52,7 +58,11 @@ const FreqDangSignals: FC = () => {
         }
     ]
 
-    const [rowsTbPo, setRowsTbPo] = useState<iTableField[]>([]);
+    const [rowsTbPo, setRowsTbPo] = useState<iFreqDangSignalsVchn[]>(props.freqDangSignalsVchnRef.current);
+
+    useEffect(() => {
+        props.freqDangSignalsVchnRef.current = rowsTbPo
+    }, [rowsTbPo])
 
     // Функция для обновления табличных данных
     const processRowUpdate = React.useCallback(

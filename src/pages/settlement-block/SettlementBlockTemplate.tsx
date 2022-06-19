@@ -6,17 +6,51 @@ import {
     ButtonGroup,
     Button,
 } from "@mui/material";
-import VchAep, {iVcaep} from "./vch-aep/VchAep";
-import Avak from "./avak/Avak";
-import NchAep from "./nch-aep/NchAep";
-import Vchn from "./vchn/Vchn";
+import VchAep, {iCalculatedDataVchAep, iMeasureResVchAepField} from "./vch-aep/VchAep";
+import Avak, {iCalculatedDataAvak, iMeasureResAvakField} from "./avak/Avak";
+import NchAep, {iCalculatedDataNchAep, iMeasureResNchAepField} from "./nch-aep/NchAep";
+import Vchn, {iCalculatedDataVchn, iMeasureResVchnField} from "./vchn/Vchn";
+import {iPreparatoryDataVchAep} from "./vch-aep/tables/PreparatoryData";
+import {iFreqDangSignalsVchAep} from "./vch-aep/tables/FreqDangSignals";
+import {iPreparatoryDataVchn} from "./vchn/table/VchnPreparatoryData";
+import {iFreqDangSignalsVchn} from "./vchn/table/VchnFreqDangSignals";
 
 interface iProps {
-    vcaepFiedl: {
-        current: iVcaep
+    measureResVchAepRef: {
+        current: iMeasureResVchAepField[]
     }
-    aepFiedl: {
-        current: iAep
+    calculatedDataVchAepRef: {
+        current: iCalculatedDataVchAep[]
+    }
+    preparatoryDataVchAepRef: {
+        current: iPreparatoryDataVchAep[]
+    }
+    freqDangSignalsVchAepRef: {
+        current: iFreqDangSignalsVchAep[]
+    }
+    measureResNchAepRef: {
+        current: iMeasureResNchAepField[]
+    }
+    calculatedDataNchAepRef: {
+        current: iCalculatedDataNchAep[]
+    }
+    measureResVchnRef: {
+        current: iMeasureResVchnField[]
+    }
+    calculatedDataVchnRef: {
+        current: iCalculatedDataVchn[]
+    }
+    preparatoryDataVchnRef: {
+        current: iPreparatoryDataVchn[]
+    }
+    freqDangSignalsVchnRef: {
+        current: iFreqDangSignalsVchn[]
+    }
+    measureResAvakRef: {
+        current: iMeasureResAvakField[]
+    }
+    calculatedDataAvakRef: {
+        current: iCalculatedDataAvak[]
     }
 }
 
@@ -47,22 +81,38 @@ const SettlementBlockTemplate: FC<iProps> = (props) => {
                             </Box>
                             <Paper elevation={4}>
                                 <Box p={2}>
-                                    <VchAep vcaepFiedl={props.vcaepFiedl}/>
+                                    <VchAep
+                                        measureResVchAepRef={props.measureResVchAepRef}
+                                        calculatedDataVchAepRef={props.calculatedDataVchAepRef}
+                                        preparatoryDataVchAepRef={props.preparatoryDataVchAepRef}
+                                        freqDangSignalsVchAepRef={props.freqDangSignalsVchAepRef}
+                                    />
                                 </Box>
                             </Paper>
                             <Paper elevation={4} sx={{mt: 2}}>
                                 <Box p={2}>
-                                    <NchAep vcaepFiedl={props.vcaepFiedl}/>
+                                    <NchAep
+                                        measureResNchAepRef={props.measureResNchAepRef}
+                                        calculatedDataNchAepRef={props.calculatedDataNchAepRef}
+                                    />
                                 </Box>
                             </Paper>
                             <Paper elevation={4} sx={{mt: 2}}>
                                 <Box p={2}>
-                                    <Vchn vcaepFiedl={props.vcaepFiedl}/>
+                                    <Vchn
+                                        measureResVchnRef={props.measureResVchnRef}
+                                        calculatedDataVchnRef={props.calculatedDataVchnRef}
+                                        preparatoryDataVchnRef={props.preparatoryDataVchnRef}
+                                        freqDangSignalsVchnRef={props.freqDangSignalsVchnRef}
+                                    />
                                 </Box>
                             </Paper>
                             <Paper elevation={4} sx={{mt: 2}}>
                                 <Box p={2}>
-                                    <Avak/>
+                                    <Avak
+                                        measureResAvakRef={props.measureResAvakRef}
+                                        calculatedDataAvakRef={props.calculatedDataAvakRef}
+                                    />
                                 </Box>
                             </Paper>
                         </Box>
