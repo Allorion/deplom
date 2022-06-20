@@ -67,6 +67,7 @@ const VchAep: FC<iProps> = (props) => {
 
             // Перевод из децибел в мкВ
             Ushij = +(Math.pow(10, (Ushij/20))).toFixed(3)
+            Uhij = +(Math.pow(10, (Uhij/20))).toFixed(3)
 
             // 1. Рассчитать уровень информативного сигнала
             let Ucij: number = +(0.7 * Math.sqrt(Math.pow(Ushij, 2) - Math.pow(Uhij, 2))).toFixed(3)
@@ -162,7 +163,7 @@ const VchAep: FC<iProps> = (props) => {
         },
         {
             field: 'vchAepUhij',
-            headerName: 'Uшij, мкВ',
+            headerName: 'Uшij, дБ',
             width: 245,
             editable: true,
             type: "number",

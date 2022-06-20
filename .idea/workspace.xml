@@ -2,7 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="56aba933-3747-464b-98ad-3329ecab8264" name="Changes" comment="Правки">
-      <change beforePath="$PROJECT_DIR$/src/pages/formation-accounting-documentation/FormationAccountingDocTemplate.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/formation-accounting-documentation/FormationAccountingDocTemplate.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/settlement-block/nch-aep/NchAep.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/settlement-block/nch-aep/NchAep.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/settlement-block/vch-aep/VchAep.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/settlement-block/vch-aep/VchAep.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -53,7 +55,7 @@
       <recent name="C:\Users\wlad7\Documents\GitHub\deplom\src\pages\formation-accounting-documentation\components" />
     </key>
   </component>
-  <component name="RunManager" selected="npm.start">
+  <component name="RunManager" selected="npm.deploy">
     <configuration name="deploy" type="js.build_tools.npm" nameIsGenerated="true">
       <package-json value="$PROJECT_DIR$/package.json" />
       <command value="run" />
@@ -97,7 +99,11 @@
       <workItem from="1655632963605" duration="8305000" />
       <workItem from="1655656249678" duration="4043000" />
       <workItem from="1655660331770" duration="915000" />
-      <workItem from="1655662839574" duration="609000" />
+      <workItem from="1655662839574" duration="703000" />
+      <workItem from="1655702053954" duration="59000" />
+      <workItem from="1655702358594" duration="333000" />
+      <workItem from="1655702717067" duration="174000" />
+      <workItem from="1655703137370" duration="519000" />
     </task>
     <task id="LOCAL-00001" summary="Правки">
       <created>1655662386953</created>
@@ -106,7 +112,14 @@
       <option name="project" value="LOCAL" />
       <updated>1655662386953</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Правки">
+      <created>1655663521416</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1655663521416</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

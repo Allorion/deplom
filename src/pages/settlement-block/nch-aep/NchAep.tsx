@@ -79,6 +79,8 @@ const NchAep: FC<iProps> = (props) => {
 
             // Перевод из децибел в мкВ
             Ushi = +(Math.pow(10, (Ushi/20))).toFixed(3)
+            Uhi = +(Math.pow(10, (Uhi/20))).toFixed(3)
+
             //1. Рассчитать уровень информативного сигнала
             let Uci: number = +(0.7 * Math.sqrt(Math.pow(Ushi, 2) - Math.pow(Uhi, 2))).toFixed(3)
 
