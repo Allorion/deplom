@@ -1,0 +1,19 @@
+@media print{#switch-button{display:none}}.page{background-color:#fff;font-size:14px;height:100%;overflow-x:hidden}
+
+
+
+/*!*@media print {*!*/
+/*!*    ul, ol, table {*!*/
+/*!*        page-break-inside: avoid;*!*/
+/*!*    }*!*/
+/*!*    #navigate {*!*/
+/*!*        display: none;*!*/
+/*!*    }*!*/
+/*!*    #buttonAddRow {*!*/
+/*!*        display: none;*!*/
+/*!*    }*!*/
+/*!*    #switch-button {*!*/
+/*!*        display: none;*!*/
+/*!*    }*!*/
+/*!*}*!*/
+/*# sourceMappingURL=main.b51893a3.css.map*/
