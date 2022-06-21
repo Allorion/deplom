@@ -106,10 +106,10 @@ const Table1: FC = () => {
     }
 
     return(
-        <React.Fragment>
+        <div style={{width: '97%'}}>
             <Typography variant={'body1'} textAlign={'right'}>Таблица 1</Typography>
             <Button onClick={addNewRow} id={'buttonAddRow'}>Добавить строку</Button>
-            <div style={{height: 400, width: '100%'}}>
+            <div style={{height: 400}}>
                 <DataGrid
                     rows={rowsTbPo}
                     columns={columns}
@@ -119,7 +119,7 @@ const Table1: FC = () => {
                     experimentalFeatures={{newEditingApi: true}}
                 />
             </div>
-        </React.Fragment>
+        </div>
     );
 };
 

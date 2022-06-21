@@ -1,43 +1,122 @@
-body {
-    page-break-inside: avoid
-}
-
-h1 {
-    font-size: 24px;
-}
-
-h2 {
-    font-size: 20px;
-}
-
-h3 {
-    font-size: 18px;
-}
-p { text-indent: 25px; }
-#navigate {
-    display: none;
-}
-.input-center input{
-    text-align: center;
-}
-
-
 @media print {
-    ul, ol, table {
-        page-break-inside: avoid;
-    }
-    #navigate {
+    #switch-button {
         display: none;
     }
-    #buttonAddRow {
-        display: none;
-    }
-    /*#page {*/
-    /*    height: 297mm;*/
-    /*    width: 210mm;*/
-    /*    margin-bottom: 20mm;*/
-    /*    background-color: white;*/
-    /*    font-size: 14px;*/
-    /*    display: flex;*/
-    /*}*/
 }
+.page {
+    height: 100%;
+    background-color: white;
+    font-size: 14px;
+    overflow-x: hidden;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*html, body{*/
+/*    justify-content: center;*/
+/*    align-content: center;*/
+/*    width: 100%;*/
+/*}*/
+/*#page2 {*/
+/*    height: 297mm;*/
+/*    width: 210mm;*/
+/*}*/
+/*@media print {*/
+/*    #page2 {*/
+/*        height: 100%;*/
+/*        margin: 0 auto;*/
+/*        padding: 0px;*/
+/*        background: white;*/
+/*        display: block;*/
+/*        position: relative;*/
+/*        overflow: hidden;*/
+/*        margin-bottom: 0.5cm;*/
+/*        page-break-after: always;*/
+/*    }*/
+/*}*/
+/*@page {*/
+/*    margin: 10mm 10mm 10mm 20mm;*/
+/*}*/
+/*@media print {*/
+/*    *, *:before, *:after {*/
+/*        color: #000;*/
+/*        box-shadow: none;*/
+/*        text-shadow: none;*/
+/*    }*/
+/*}*/
+/*@media print {*/
+/*    html, body {*/
+/*        font-size: 14px;*/
+/*    }*/
+/*    h1 {*/
+/*        font-size: 24px;*/
+/*    }*/
+/*    h2 {*/
+/*        font-size: 20px;*/
+/*    }*/
+/*    h3 {*/
+/*        font-size: 18px;*/
+/*    }*/
+/*}*/
+/*@media print {*/
+/*    .header, .footer, .banner {*/
+/*        display: none;*/
+/*    }*/
+/*}*/
+
+/*}*/
+/*@media print{*/
+/*    ul, ol, table {*/
+/*        page-break-inside: avoid;*/
+/*    }*/
+/*}*/
+
+
+
+/*!*@media print {*!*/
+/*!*    ul, ol, table {*!*/
+/*!*        page-break-inside: avoid;*!*/
+/*!*    }*!*/
+/*!*    #navigate {*!*/
+/*!*        display: none;*!*/
+/*!*    }*!*/
+/*!*    #buttonAddRow {*!*/
+/*!*        display: none;*!*/
+/*!*    }*!*/
+/*!*    #switch-button {*!*/
+/*!*        display: none;*!*/
+/*!*    }*!*/
+/*    #page2 {*/
+/*        height: 297mm;*/
+/*        width: 210mm;*/
+/*        margin-bottom: 20mm;*/
+/*        background-color: white;*/
+/*        font-size: 14px;*/
+/*        display: flex;*/
+/*    }*/
+/*!*}*!*/

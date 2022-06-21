@@ -1,62 +1,48 @@
 import React, {FC, useState} from "react";
-import {Button, Typography} from "@mui/material";
 import {DataGrid, GridActionsCellItem, GridColumns, GridRowModel} from "@mui/x-data-grid";
-import DeleteIcon from "@mui/icons-material/Delete";
 import GenerateId from "../../../global-component/GenerateId";
-import "../static/index.css";
+import {Button} from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
 
-interface iRow {
+
+interface ITable {
     id: string,
-    numberOrder: number,
     field1: string,
-    field2: string,
+    field2: string
     field3: string
-    field4: string
 }
 
-const Table2: FC = () => {
+
+const PropertyList: FC = () => {
 
     // Указываем какие поля будут в строке таблицы
     const columns: GridColumns = [
         {
-            field: 'numberOrder',
-            headerName: '№',
-            width: 50,
+            field: 'field1',
+            headerName: '',
+            width: 100,
             editable: true,
             type: "number",
-            headerAlign: 'center'
-        },
-        {
-            field: 'field1',
-            headerName: 'Наименование вспомогательного технического средства и системы, заводской (инвентарный) номер',
-            width: 170,
-            editable: true,
-            type: "string",
-            headerAlign: 'center'
+            headerAlign: 'center',
+            align: 'center'
         },
         {
             field: 'field2',
-            headerName: 'Минимальное расстояние до основных технических средств и систем, м',
-            width: 170,
-            editable: true,
-            type: "string",
-            headerAlign: 'center'
+            headerName: '',
+            width: 270,
+            editable: false,
+            type: "number",
+            headerAlign: 'center',
+            align: 'left'
         },
         {
-            field: 'field3',
-            headerName: 'Сведения о специальных проверках4',
-            width: 115,
-            editable: true,
-            type: "string",
-            headerAlign: 'center'
-        },
-        {
-            field: 'field4',
-            headerName: 'Сведения о специальных исследованиях или сертификатах соответствия5',
-            width: 170,
-            editable: true,
-            type: "string",
-            headerAlign: 'center'
+            field: 'field2',
+            headerName: '',
+            width: 270,
+            editable: false,
+            type: "number",
+            headerAlign: 'center',
+            align: 'left'
         },
         {
             field: 'test',
@@ -79,7 +65,7 @@ const Table2: FC = () => {
         }
     ]
 
-    const [rowsTbPo, setRowsTbPo] = useState<iRow[]>([]);
+    const [rowsTbPo, setRowsTbPo] = useState<ITable[]>([]);
 
     // Функция для обновления табличных данных
     const processRowUpdate = React.useCallback(
@@ -93,11 +79,9 @@ const Table2: FC = () => {
     const addNewRow = () => {
         setRowsTbPo([...rowsTbPo, {
             id: GenerateId(),
-            numberOrder: rowsTbPo.length + 1,
             field1: '',
             field2: '',
-            field3: '',
-            field4: ''
+            field3: ''
         }])
     }
 
@@ -105,11 +89,10 @@ const Table2: FC = () => {
         setRowsTbPo(rowsTbPo.filter(obj => obj.id !== id))
     }
 
-    return(
-        <div style={{width: '97%'}}>
-            <Typography variant={'body1'} textAlign={'right'}>Таблица 2</Typography>
-            <Button onClick={addNewRow} id={'buttonAddRow'}>Добавить строку</Button>
-            <div style={{height: 400, width: '100%'}}>
+    return (
+        <React.Fragment>
+            <div style={{height: 787, width: '97%', marginBottom: 30}}>
+                <Button onClick={addNewRow}>Добавить строку</Button>
                 <DataGrid
                     rows={rowsTbPo}
                     columns={columns}
@@ -119,8 +102,8 @@ const Table2: FC = () => {
                     experimentalFeatures={{newEditingApi: true}}
                 />
             </div>
-        </div>
+        </React.Fragment>
     );
 };
 
-export default Table2;
+export default PropertyList;
