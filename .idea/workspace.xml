@@ -1,17 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="56aba933-3747-464b-98ad-3329ecab8264" name="Changes" comment="Правки">
-      <change afterPath="$PROJECT_DIR$/src/pages/formation-accounting-documentation/components/Akt1.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/pages/formation-accounting-documentation/components/Akt2.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/pages/formation-accounting-documentation/components/Data.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/pages/formation-accounting-documentation/components/PropertyList.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/pages/formation-accounting-documentation/components/TableDocument.tsx" afterDir="false" />
+    <list default="true" id="56aba933-3747-464b-98ad-3329ecab8264" name="Changes" comment="Добавлен акт">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/formation-accounting-documentation/FormationAccountingDocTemplate.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/formation-accounting-documentation/FormationAccountingDocTemplate.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/formation-accounting-documentation/components/Table1.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/formation-accounting-documentation/components/Table1.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/formation-accounting-documentation/components/Table2.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/formation-accounting-documentation/components/Table2.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/formation-accounting-documentation/static/index.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/formation-accounting-documentation/static/index.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/logo192.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/logo512.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/manifest.json" beforeDir="false" afterPath="$PROJECT_DIR$/public/manifest.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -112,7 +106,8 @@
       <workItem from="1655702717067" duration="174000" />
       <workItem from="1655703137370" duration="666000" />
       <workItem from="1655732021399" duration="10307000" />
-      <workItem from="1655794115057" duration="1863000" />
+      <workItem from="1655794115057" duration="1975000" />
+      <workItem from="1655796163396" duration="114000" />
     </task>
     <task id="LOCAL-00001" summary="Правки">
       <created>1655662386953</created>
@@ -135,7 +130,14 @@
       <option name="project" value="LOCAL" />
       <updated>1655722910207</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Добавлен акт">
+      <created>1655796087522</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1655796087522</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -154,6 +156,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Правки" />
-    <option name="LAST_COMMIT_MESSAGE" value="Правки" />
+    <MESSAGE value="Добавлен акт" />
+    <option name="LAST_COMMIT_MESSAGE" value="Добавлен акт" />
   </component>
 </project>
