@@ -341,6 +341,58 @@ const Vchn: FC<iProps> = (props) => {
                                 </TableBody>
                             </Table>
                         </TableContainer>
+                        <TableContainer
+                            component={Paper}
+                            sx={{mt: 2, display: props.calculatedDataVchnRef.current[0]?.Deltaij === undefined ? 'none' : 'block'}}
+                            elevation={4}
+                        >
+                            <Table sx={{minWidth: 650}} aria-label="simple table">
+                                <TableBody>
+                                    <TableRow
+                                        sx={{
+                                            '&:nth-of-type(even) td, &:nth-of-type(odd) td, &:nth-of-type(even) th, &:nth-of-type(odd) th': {
+                                                border: 1,
+                                                rowSpan: 1,
+                                                align: 'center',
+                                                size: "small"
+                                            }
+                                        }}>
+                                        <TableCell align="center">Словесная разборчивость речи W для стац. TCP</TableCell>
+                                        <TableCell align="center">0.27</TableCell>
+                                        <TableCell align="center">Норма выполняется?</TableCell>
+                                        <TableCell align="center">Да</TableCell>
+                                    </TableRow>
+                                    <TableRow
+                                        sx={{
+                                            '&:nth-of-type(even) td, &:nth-of-type(odd) td, &:nth-of-type(even) th, &:nth-of-type(odd) th': {
+                                                border: 1,
+                                                rowSpan: 1,
+                                                align: 'center',
+                                                size: "small"
+                                            }
+                                        }}>
+                                        <TableCell align="center">Словесная разборчивость речи W для воз. TCP</TableCell>
+                                        <TableCell align="center">0.27</TableCell>
+                                        <TableCell align="center">Норма выполняется?</TableCell>
+                                        <TableCell align="center">Да</TableCell>
+                                    </TableRow>
+                                    <TableRow
+                                        sx={{
+                                            '&:nth-of-type(even) td, &:nth-of-type(odd) td, &:nth-of-type(even) th, &:nth-of-type(odd) th': {
+                                                border: 1,
+                                                rowSpan: 1,
+                                                align: 'center',
+                                                size: "small"
+                                            }
+                                        }}>
+                                        <TableCell align="center">Словесная разборчивость речи W для нос. TCP</TableCell>
+                                        <TableCell align="center">0.12</TableCell>
+                                        <TableCell align="center">Норма выполняется?</TableCell>
+                                        <TableCell align="center">Да</TableCell>
+                                    </TableRow>
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
                     </Box>
                 </Paper>
             </Stack>

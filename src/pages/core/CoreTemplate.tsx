@@ -488,7 +488,7 @@ const CoreTemplate: FC = () => {
                                         <Grid item xs container direction="column" spacing={2}>
                                             <Grid item xs>
                                                 <Typography gutterBottom variant="subtitle1" component="div">
-                                                    Формирование документации исходных данных
+                                                    Блок формирования вербальной графической информации
                                                 </Typography>
                                                 {/*<Typography variant="body2" gutterBottom>*/}
                                                 {/*    можно чето написать*/}

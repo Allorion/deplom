@@ -78,8 +78,8 @@ const NchAep: FC<iProps> = (props) => {
             let DeltaFi: number = measureResNchAepField[i].nchAepDeltaFi === null ? 0 : measureResNchAepField[i].nchAepDeltaFi
 
             // Перевод из децибел в мкВ
-            Ushi = +(Math.pow(10, (Ushi/20))).toFixed(3)
-            Uhi = +(Math.pow(10, (Uhi/20))).toFixed(3)
+            Ushi = +(Math.pow(10, (Ushi / 20))).toFixed(3)
+            Uhi = +(Math.pow(10, (Uhi / 20))).toFixed(3)
 
             //1. Рассчитать уровень информативного сигнала
             let Uci: number = +(0.7 * Math.sqrt(Math.pow(Ushi, 2) - Math.pow(Uhi, 2))).toFixed(3)
@@ -282,6 +282,58 @@ const NchAep: FC<iProps> = (props) => {
                                             <TableCell align="center">{obj.Deltai}</TableCell>
                                         </TableRow>
                                     ))}
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
+                        <TableContainer
+                            component={Paper}
+                            sx={{mt: 2, display: props.calculatedDataNchAepRef.current[0]?.Deltai === undefined ? 'none' : 'block'}}
+                            elevation={4}
+                        >
+                            <Table sx={{minWidth: 650}} aria-label="simple table">
+                                <TableBody>
+                                    <TableRow
+                                        sx={{
+                                            '&:nth-of-type(even) td, &:nth-of-type(odd) td, &:nth-of-type(even) th, &:nth-of-type(odd) th': {
+                                                border: 1,
+                                                rowSpan: 1,
+                                                align: 'center',
+                                                size: "small"
+                                            }
+                                        }}>
+                                        <TableCell align="center">Словесная разборчивость речи W для стац. TCP</TableCell>
+                                        <TableCell align="center">0.27</TableCell>
+                                        <TableCell align="center">Норма выполняется?</TableCell>
+                                        <TableCell align="center">Да</TableCell>
+                                    </TableRow>
+                                    <TableRow
+                                        sx={{
+                                            '&:nth-of-type(even) td, &:nth-of-type(odd) td, &:nth-of-type(even) th, &:nth-of-type(odd) th': {
+                                                border: 1,
+                                                rowSpan: 1,
+                                                align: 'center',
+                                                size: "small"
+                                            }
+                                        }}>
+                                        <TableCell align="center">Словесная разборчивость речи W для воз. TCP</TableCell>
+                                        <TableCell align="center">0.27</TableCell>
+                                        <TableCell align="center">Норма выполняется?</TableCell>
+                                        <TableCell align="center">Да</TableCell>
+                                    </TableRow>
+                                    <TableRow
+                                        sx={{
+                                            '&:nth-of-type(even) td, &:nth-of-type(odd) td, &:nth-of-type(even) th, &:nth-of-type(odd) th': {
+                                                border: 1,
+                                                rowSpan: 1,
+                                                align: 'center',
+                                                size: "small"
+                                            }
+                                        }}>
+                                        <TableCell align="center">Словесная разборчивость речи W для нос. TCP</TableCell>
+                                        <TableCell align="center">0.12</TableCell>
+                                        <TableCell align="center">Норма выполняется?</TableCell>
+                                        <TableCell align="center">Да</TableCell>
+                                    </TableRow>
                                 </TableBody>
                             </Table>
                         </TableContainer>
